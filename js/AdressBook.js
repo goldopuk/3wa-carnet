@@ -18,7 +18,7 @@ function getContactList() {
 
 function saveContact(contact) {
 
-	
+	var contactList = getContactList();
 
 	contactList.push(contact);
 
@@ -29,28 +29,34 @@ function saveContact(contact) {
 	// ajouter le contact au localstorage
 }
 
+
+
 function displayContacts() {
-	var contactListJSON = localStorage.getItem('contactList');
-
-	var contactList;
-
-	if (contactListJSON === null) {
-		contactList = [];
-	} else {
-		contactList = JSON.parse(contactListJSON);	
-	}
+	
+	var contactList = getContactList();
 
 	var html = '';
 
 	for (var i = 0; i < contactList.length; i++) {
 		var contact = contactList[i];
-		html += "<li>" + contact.firstname + " " + contact.lastname + "<li>";
+		html += '<li data-id="' + i + '">' + contact.firstname + " " + contact.lastname + "<li>";
 	}
 
 
-	$('.contact-list').html(html);	
+	$('.contact-list').html(html);
+
+	$('.contact-list li').on('click' , function () {
+		var contactId = $(this).attr('data-id');	
+		displayContact(contactId);
+	});
 }
 
-function removeContact() {
+function displayContact(contactId) {
+	var contactList = getContactList();
 
+	var contact = contactList[contactId];
+	console.log(contact);
+
+	$('.contact-details h2').html(contact.firstname + "" + contact.lastname);
+	$('.contact-details .phone').html(contact.phone);
 }
